@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import CourseModule from './modules/courses/course.module';
 import configuration from './config/configuration';
 import { JwtModule } from '@nestjs/jwt';
+import UserModule from './modules/users/user.module';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -34,6 +35,7 @@ const ENV = process.env.NODE_ENV || 'development';
       },
       inject: [ConfigService],
     }),
+    UserModule,
     CourseModule,
   ],
   controllers: [],

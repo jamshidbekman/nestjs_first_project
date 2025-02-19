@@ -5,6 +5,7 @@ import CourseModule from './modules/courses/course.module';
 import configuration from './config/configuration';
 import { JwtModule } from '@nestjs/jwt';
 import UserModule from './modules/users/user.module';
+import AuthModule from './modules/auth/auth.module';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -27,14 +28,16 @@ const ENV = process.env.NODE_ENV || 'development';
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
+      global: true,
       useFactory: async (configService: ConfigService) => {
         return {
           secret: configService.get<string>('JWT_KEY'),
-          global: true,
+          signOptions: {expiresIn: '2h'}
         };
       },
       inject: [ConfigService],
     }),
+    AuthModule,
     UserModule,
     CourseModule,
   ],

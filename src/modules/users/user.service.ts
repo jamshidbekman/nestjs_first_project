@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './models/create-user.model';
+import { User, UserDocument } from './models/user.model';
 import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/created-user.dto';
 import { Role } from 'src/common/constants/roles.enum';
 import * as bcrypt from 'bcrypt';
 

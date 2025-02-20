@@ -10,11 +10,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const PORT = Number(configService.get<string>('PORT'));
   app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
+    new ValidationPipe(),
   );
   await app.listen(PORT, () => {
     console.log('Server is running port', PORT);

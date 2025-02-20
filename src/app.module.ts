@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import CourseModule from './modules/courses/course.module';
-import configuration from './config/configuration';
 import { JwtModule } from '@nestjs/jwt';
-import UserModule from './modules/users/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import configuration from './config/configuration';
 import AuthModule from './modules/auth/auth.module';
+import { SubjectsModule } from './modules/subjects/subjects.module';
+import { TeachersModule } from './modules/teachers/teachers.module';
+import { StudentsModule } from './modules/students/students.module';
+import { CoursesModule } from './modules/courses/courses.module';
+import UserModule from './modules/users/user.module';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -32,14 +35,17 @@ const ENV = process.env.NODE_ENV || 'development';
       useFactory: async (configService: ConfigService) => {
         return {
           secret: configService.get<string>('JWT_KEY'),
-          signOptions: {expiresIn: '2h'}
+          signOptions: { expiresIn: '2h' },
         };
       },
       inject: [ConfigService],
     }),
     AuthModule,
     UserModule,
-    CourseModule,
+    SubjectsModule,
+    TeachersModule,
+    StudentsModule,
+    CoursesModule,
   ],
   controllers: [],
   providers: [],

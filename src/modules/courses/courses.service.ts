@@ -1,26 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Course, CourseDocument } from './models/course.models';
+import { Model } from 'mongoose';
+import { Teacher, TeacherDocument } from '../teachers/models/teacher.model';
 
 @Injectable()
 export class CoursesService {
-  create(createCourseDto: CreateCourseDto) {
-    return 'This action adds a new course';
-  }
+  constructor(
+    @InjectModel(Course.name) readonly courseModel: Model<CourseDocument>,
+    @InjectModel(Teacher.name) readonly teacherModel: Model<TeacherDocument>,
+  ) {}
+  async createCourse(courseDto: CreateCourseDto) {
+    const findTeacher = await this.teacherModel.findById(courseDto.teacherId);
 
-  findAll() {
-    return `This action returns all courses`;
-  }
+    if (!findTeacher)
+      throw new BadRequestException('Bunday teacher mavjud emas');
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
-  }
+    const course = await this.courseModel.create(courseDto);
 
-  update(id: number, updateCourseDto: UpdateCourseDto) {
-    return `This action updates a #${id} course`;
-  }
+    if (!course) throw new BadRequestException('Something went wrong');
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+    return {
+      success: true,
+      message: 'Kurs muvaffaqqiyatli yaratildi',
+      data: course,
+    };
   }
 }
